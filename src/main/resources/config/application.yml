@@ -1,0 +1,38 @@
+server:
+  port: 8000
+
+spring:
+    freemarker:
+      check-template-location: false
+    profiles:
+      active: dev
+    jackson:
+      time-zone: GMT+8
+    data:
+      redis:
+        repositories:
+          enabled: false
+
+    redis:
+      #数据库索引
+      database: 0
+      host: 127.0.0.1
+      port: 6379
+      password:
+
+    mail:
+      email: xxxx@163.com
+      host: smtp.163.com
+      port: 465
+      username: xxxx
+      # 授权密码， 非邮箱密码，授权码是用于登录第三方邮件客户端的专用密码。
+      password: xxxxx
+
+
+#邮箱验证码有效时间/秒
+code:
+  expiration: 300
+
+#密码加密传输，前端公钥加密，后端私钥解密
+rsa:
+  private-key: MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAMVi+ZO4Osp1IVYfJSlxvUdp0gRT/oyVyFbXyRLETrV4KbELq1svTyf51LbQL945XAqm8f/UrQTfjBw21qOhCBY+MUZEopx4NvDfr8zk/4DV8oxlVEqV5v9ggiQdCYHsazT1pxYqlIZ9xjN5j+4DChYFM6vXPvKWZ0zOD4B65v1JAgMBAAECgYEAntdWJnTUAsadbBOmMSLRgd17X3ZEWtfSH2iI6+xDtq8bRdkxLTD2DyJx9ie0zaz1D7Fm/0wja8+FjdLniUf2G5xOYnqnCaAa8ZOSvah4B0efykjujzFzEkX0CrgYjGhn5HhWFyha3qenEYkaSGYc/rYjqPq1c+gONM2YPVmXzz0CQQD6V4Azt5YX3iwq7LdCtqufARDTZy2sqRxcxIqatTun7VXH/gyN7NwybxNLtzUh/oHRukNzrtGMtgpnhENF7CavAkEAydkSJiH/BFCz0jDdEXMZQs+rZhR4JMuaddqdOMiV95T80jnT8CUsLrPZALCYh4xkj/ZbPMWYCdAvfDFlG8CZhwJBAKKoM95mjJlZe+0v/SrVsdEQSjRxt9WV053a/gvjca18od3eDZ4xpikGzszFbzp1OThiA+2oSvNYXI5B+8v00nUCQQC56/ZppXrOsL9R5qxaPFiST9Mizcv0qI337IxRF4H7cQKHabisRLEzu3kwx3lXsZuXd2aGzcLDlz2F+cGWFIvVAkBOyFVrnnGl1jO5WY9mWqMD3w7othS5J8gM3X3byURcsyeQejQZiXnCV086hzAxzCYRA39o0BU0Gbk4JeEW1p+B

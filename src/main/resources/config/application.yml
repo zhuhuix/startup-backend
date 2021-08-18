@@ -21,12 +21,12 @@ spring:
       password:
 
     mail:
-      email: xxxx@163.com
+      email: xxx@163.com
       host: smtp.163.com
       port: 465
       username: xxxx
       # 授权密码， 非邮箱密码，授权码是用于登录第三方邮件客户端的专用密码。
-      password: xxxxx
+      password: xxxxxxx
 
 
 #邮箱验证码有效时间/秒

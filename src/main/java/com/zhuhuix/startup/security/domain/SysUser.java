@@ -68,8 +68,7 @@ public class SysUser implements Serializable {
 
     private Timestamp lastPasswordResetTime;
 
-    @Builder.Default
-    private Timestamp createTime = Timestamp.valueOf(LocalDateTime.now());
+    private Timestamp createTime;
 
     @Builder.Default
     private Timestamp updateTime = Timestamp.valueOf(LocalDateTime.now());

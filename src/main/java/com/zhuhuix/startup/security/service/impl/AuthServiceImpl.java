@@ -31,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,6 +84,7 @@ public class AuthServiceImpl implements AuthService {
         // 创建用户
         SysUser sysUser = new SysUser();
         sysUser.setUserName(userName);
+        sysUser.setCreateTime(Timestamp.valueOf(LocalDateTime.now()));
         try {
             sysUser.setPassword(passwordEncoder.encode(RsaUtils.decryptByPrivateKey(privateKey, authUserDto.getPassword())));
         } catch (Exception e) {

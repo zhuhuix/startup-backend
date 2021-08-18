@@ -4,6 +4,9 @@ import com.zhuhuix.startup.common.base.Result;
 import com.zhuhuix.startup.security.domain.SysUser;
 import com.zhuhuix.startup.security.service.dto.JwtUserDto;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 /**
  * 用户信息接口
@@ -35,7 +38,7 @@ public interface SysUserService {
      * @param user 待修改的用户
      * @return 修改成功的用户
      */
-    Result<SysUser> update(SysUser user);
+    SysUser update(SysUser user);
 
 
     /**
@@ -60,5 +63,13 @@ public interface SysUserService {
      * @return 用户信息
      */
     UserDetails getUserInfo();
+
+
+    /**
+     * 修改用户头像
+     * @param file 文件
+     * @return json
+     */
+    Map<String,String>  updateAvatar(MultipartFile file);
 
 }

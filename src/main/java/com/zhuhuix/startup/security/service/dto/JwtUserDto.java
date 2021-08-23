@@ -43,9 +43,9 @@ public class JwtUserDto implements UserDetails {
     @JsonIgnore
     private final List<GrantedAuthority> authorities;
 
-//    public Set<String> getRoles() {
-//        return authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-//    }
+    public Set<String> getRoles() {
+        return authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+    }
 
     @Override
     @JsonIgnore

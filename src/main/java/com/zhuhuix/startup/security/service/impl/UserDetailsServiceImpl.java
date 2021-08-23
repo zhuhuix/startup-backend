@@ -19,6 +19,7 @@ import com.zhuhuix.startup.security.domain.SysUser;
 import com.zhuhuix.startup.security.service.SysUserService;
 import com.zhuhuix.startup.security.service.dto.JwtUserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
  *
  * @author zhuhuix
  * @date 2020-06-15
+ * @date 2021-08-23 静态给用户加上权限控制字符 user:updateAvatar
  */
 @RequiredArgsConstructor
 @Service("userDetailsService")
@@ -54,7 +56,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return new JwtUserDto(
                     user,
                     null,
-                    null
+                    AuthorityUtils.commaSeparatedStringToAuthorityList("user:updateAvatar")
             );
         }
     }

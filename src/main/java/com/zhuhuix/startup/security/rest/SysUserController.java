@@ -6,8 +6,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,6 +38,7 @@ public class SysUserController {
         return ResponseEntity.ok(sysUserService.update(user));
     }
 
+    @PreAuthorize("hasAuthority('user:updateAvatar')")
     @ApiOperation("修改用户头像")
     @PostMapping(value = "/updateAvatar")
     public ResponseEntity<Object> updateAvatar(@RequestParam MultipartFile avatar) {

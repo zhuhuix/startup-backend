@@ -15,14 +15,18 @@
  */
 package com.zhuhuix.startup.security.service.impl;
 
+import com.zhuhuix.startup.security.domain.SysRole;
 import com.zhuhuix.startup.security.domain.SysUser;
 import com.zhuhuix.startup.security.service.SysUserService;
 import com.zhuhuix.startup.security.service.dto.JwtUserDto;
+import com.zhuhuix.startup.security.service.dto.PermissionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 /**
  * 用户认证
@@ -56,7 +60,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return new JwtUserDto(
                     user,
                     null,
-                    AuthorityUtils.commaSeparatedStringToAuthorityList("user:updateAvatar")
+                    sysUserService.getUserRoles(user.getId()).stream().map(SysRole::getRoleCode).collect(Collectors.toList()),
+                    AuthorityUtils.commaSeparatedStringToAuthorityList(
+                            sysUserService.getUserPermission(user.getId()).stream().map(PermissionDto::getPath).collect(Collectors.joining(",")))
             );
         }
     }

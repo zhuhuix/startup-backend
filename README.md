@@ -3,7 +3,8 @@
 ##### 一、数据库配置
   ###### 创建数据库
   - Mysql 5.0以上
-  - 运行startup_backupend.sql
+  - 手动创建startup_backend空库
+  - 运行startup_backend.sql
   ###### 配置数据源
   ####### 开发环境
   - 打开resources/config/application-dev.yml
@@ -37,4 +38,4 @@
           # 授权密码， 非邮箱密码，授权码是用于登录第三方邮件客户端的专用密码。
           password: xxxxx
  
-  
+ 

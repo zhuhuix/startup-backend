@@ -42,7 +42,13 @@ public class SysUserController {
     @ApiOperation("修改用户头像")
     @PostMapping(value = "/updateAvatar")
     public ResponseEntity<Object> updateAvatar(@RequestParam MultipartFile avatar) {
-        return  ResponseEntity.ok(sysUserService.updateAvatar(avatar));
+        return ResponseEntity.ok(sysUserService.updateAvatar(avatar));
+    }
+
+    @ApiOperation("获取用户权限")
+    @GetMapping("/permission/{userId}")
+    public ResponseEntity<Object> getUserPermission(@PathVariable Long userId) {
+        return ResponseEntity.ok(sysUserService.getUserPermission(userId));
     }
 
 }

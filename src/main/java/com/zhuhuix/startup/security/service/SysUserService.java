@@ -1,11 +1,14 @@
 package com.zhuhuix.startup.security.service;
 
 import com.zhuhuix.startup.common.base.Result;
+import com.zhuhuix.startup.security.domain.SysRole;
 import com.zhuhuix.startup.security.domain.SysUser;
 import com.zhuhuix.startup.security.service.dto.JwtUserDto;
+import com.zhuhuix.startup.security.service.dto.PermissionDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -71,5 +74,19 @@ public interface SysUserService {
      * @return json
      */
     Map<String,String>  updateAvatar(MultipartFile file);
+
+    /**
+     * 获取用户角色信息
+     * @param userId 用户id
+     * @return 角色信息
+     */
+    List<SysRole> getUserRoles(Long userId);
+
+    /**
+     * 获取用户权限信息
+     * @param userId 用户id
+     * @return 权限信息
+     */
+    List<PermissionDto> getUserPermission(Long userId);
 
 }

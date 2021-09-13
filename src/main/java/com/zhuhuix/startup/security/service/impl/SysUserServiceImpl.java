@@ -2,9 +2,11 @@ package com.zhuhuix.startup.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zhuhuix.startup.common.base.Result;
+import com.zhuhuix.startup.security.domain.SysRole;
 import com.zhuhuix.startup.security.domain.SysUser;
 import com.zhuhuix.startup.security.mapper.SysUserMapper;
 import com.zhuhuix.startup.security.service.SysUserService;
+import com.zhuhuix.startup.security.service.dto.PermissionDto;
 import com.zhuhuix.startup.tools.domain.UploadFile;
 import com.zhuhuix.startup.tools.service.UploadFileTool;
 import com.zhuhuix.startup.utils.SpringContextHolder;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -93,6 +96,16 @@ public class SysUserServiceImpl implements SysUserService {
 
     }
 
+    @Override
+    public List<PermissionDto> getUserPermission(Long userId) {
+        return sysUserMapper.selectUserPermission(userId);
+    }
+
+    @Override
+    public List<SysRole> getUserRoles(Long userId) {
+        return sysUserMapper.selectUserRoles(userId);
+    }
+
     private String getCurrentLoginUserName() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
@@ -104,5 +117,6 @@ public class SysUserServiceImpl implements SysUserService {
         }
         throw new RuntimeException("找不到当前登录的信息");
     }
+
 
 }

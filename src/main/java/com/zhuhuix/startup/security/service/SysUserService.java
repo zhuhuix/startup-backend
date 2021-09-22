@@ -33,7 +33,7 @@ public interface SysUserService {
      * @param user 待删除的用户
      * @return 删除成功的用户
      */
-    Result<SysUser> delete(SysUser user);
+    SysUser delete(SysUser user);
 
     /**
      * 修改用户

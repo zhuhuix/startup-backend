@@ -1,6 +1,5 @@
 package com.zhuhuix.startup.security.service;
 
-import com.zhuhuix.startup.common.base.Result;
 import com.zhuhuix.startup.security.service.dto.AuthUserDto;
 
 import javax.servlet.http.HttpServletRequest;

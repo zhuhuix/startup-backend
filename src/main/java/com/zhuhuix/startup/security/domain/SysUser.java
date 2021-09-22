@@ -2,6 +2,7 @@ package com.zhuhuix.startup.security.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
@@ -64,6 +65,7 @@ public class SysUser implements Serializable {
 
     private String remarks;
 
+    @TableLogic
     private Boolean enabled;
 
     private Timestamp lastPasswordResetTime;

@@ -1,7 +1,6 @@
 package com.zhuhuix.startup.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.zhuhuix.startup.common.base.Result;
 import com.zhuhuix.startup.security.domain.SysRole;
 import com.zhuhuix.startup.security.domain.SysUser;
 import com.zhuhuix.startup.security.mapper.SysUserMapper;
@@ -44,15 +43,21 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SysUser create(SysUser user) {
-        return sysUserMapper.insert(user) > 0 ? user : null;
+        if (sysUserMapper.insert(user) > 0) {
+            return user;
+        }
+        throw new RuntimeException("增加用户信息失败");
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result<SysUser> delete(SysUser user) {
+    public SysUser delete(SysUser user) {
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(SysUser::getUserName, user.getUserName());
-        return sysUserMapper.delete(queryWrapper) > 0 ? new Result<SysUser>().ok(user) : new Result<SysUser>().error("删除用户失败");
+        if (sysUserMapper.delete(queryWrapper) > 0) {
+            return user;
+        }
+        throw new RuntimeException("删除用户信息失败");
     }
 
     @Override
@@ -88,7 +93,7 @@ public class SysUserServiceImpl implements SysUserService {
         SysUser sysUser = findByUserName(getCurrentLoginUserName());
 
         UploadFile uploadFile = uploadFileTool.upload(sysUser.getUserName(), file.getOriginalFilename(), file);
-        sysUser.setAvatarUrl(uploadFile.getType() + File.separator  + uploadFile.getFileName());
+        sysUser.setAvatarUrl(uploadFile.getType() + File.separator + uploadFile.getFileName());
         update(sysUser);
         return new HashMap<String, String>(1) {{
             put("avatar", uploadFile.getFileName());
@@ -117,6 +122,5 @@ public class SysUserServiceImpl implements SysUserService {
         }
         throw new RuntimeException("找不到当前登录的信息");
     }
-
 
 }

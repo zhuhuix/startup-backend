@@ -2,7 +2,9 @@ package com.zhuhuix.startup.security.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,7 +38,10 @@ public class SysRole implements Serializable {
 
     private String description;
 
-    private Boolean enabled;
+    @JsonIgnore
+    @Builder.Default
+    @TableLogic
+    private Boolean enabled = true;
 
     private Timestamp createTime;
 

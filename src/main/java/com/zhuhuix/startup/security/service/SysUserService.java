@@ -1,15 +1,15 @@
 package com.zhuhuix.startup.security.service;
 
-import com.zhuhuix.startup.common.base.Result;
 import com.zhuhuix.startup.security.domain.SysRole;
 import com.zhuhuix.startup.security.domain.SysUser;
-import com.zhuhuix.startup.security.service.dto.JwtUserDto;
 import com.zhuhuix.startup.security.service.dto.PermissionDto;
+import com.zhuhuix.startup.security.service.dto.SysUserQueryDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 用户信息接口
@@ -43,6 +43,13 @@ public interface SysUserService {
      */
     SysUser update(SysUser user);
 
+    /**
+     * 根据id查找用户
+     *
+     * @param id 用户id
+     * @return 用户信息
+     */
+    SysUser findById(Long id);
 
     /**
      * 根据userName查找用户
@@ -67,26 +74,53 @@ public interface SysUserService {
      */
     UserDetails getUserInfo();
 
-
     /**
      * 修改用户头像
+     *
      * @param file 文件
      * @return json
      */
-    Map<String,String>  updateAvatar(MultipartFile file);
+    Map<String, String> updateAvatar(MultipartFile file);
 
     /**
      * 获取用户角色信息
+     *
      * @param userId 用户id
      * @return 角色信息
      */
     List<SysRole> getUserRoles(Long userId);
 
     /**
+     * 保存用户角色
+     *
+     * @param userId 用户id
+     * @param roleIds 角色id列表
+     * @return 是否成功
+     */
+    Boolean saveUserRoles(Long userId,Set<Long> roleIds);
+
+    /**
      * 获取用户权限信息
+     *
      * @param userId 用户id
      * @return 权限信息
      */
     List<PermissionDto> getUserPermission(Long userId);
+
+    /**
+     * 根据条件查询用户信息
+     *
+     * @param sysUserQueryDto 查询条件
+     * @return 用户列表
+     */
+    List<SysUser> list(SysUserQueryDto sysUserQueryDto);
+
+    /**
+     * 批量删除用户
+     *
+     * @param ids 待删除的用户id列表
+     * @return 是否成功
+     */
+    Boolean delete(Set<Long> ids);
 
 }

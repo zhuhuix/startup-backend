@@ -3,9 +3,12 @@ package com.zhuhuix.startup.security.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zhuhuix.startup.security.domain.SysRole;
 import com.zhuhuix.startup.security.domain.SysUser;
+import com.zhuhuix.startup.security.domain.SysUserRole;
 import com.zhuhuix.startup.security.mapper.SysUserMapper;
+import com.zhuhuix.startup.security.mapper.SysUserRoleMapper;
 import com.zhuhuix.startup.security.service.SysUserService;
 import com.zhuhuix.startup.security.service.dto.PermissionDto;
+import com.zhuhuix.startup.security.service.dto.SysUserQueryDto;
 import com.zhuhuix.startup.tools.domain.UploadFile;
 import com.zhuhuix.startup.tools.service.UploadFileTool;
 import com.zhuhuix.startup.utils.SpringContextHolder;
@@ -18,12 +21,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 用户接口实现类
@@ -38,6 +45,7 @@ import java.util.Map;
 public class SysUserServiceImpl implements SysUserService {
 
     private final SysUserMapper sysUserMapper;
+    private final SysUserRoleMapper sysUserRoleMapper;
     private final UploadFileTool uploadFileTool;
 
     @Override
@@ -67,6 +75,11 @@ public class SysUserServiceImpl implements SysUserService {
             return user;
         }
         throw new RuntimeException("更新用户信息失败");
+    }
+
+    @Override
+    public SysUser findById(Long id) {
+        return sysUserMapper.selectById(id);
     }
 
     @Override
@@ -111,6 +124,25 @@ public class SysUserServiceImpl implements SysUserService {
         return sysUserMapper.selectUserRoles(userId);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean saveUserRoles(Long userId, Set<Long> roleIds) {
+        // 首先清除该用户原有的角色信息
+        QueryWrapper<SysUserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(SysUserRole::getUserId, userId);
+        sysUserRoleMapper.delete(queryWrapper);
+        // 再进行添加
+        for (Long roleId : roleIds) {
+            SysUserRole sysUserRole = new SysUserRole();
+            sysUserRole.setUserId(userId);
+            sysUserRole.setRoleId(roleId);
+            sysUserRole.setCreateTime(Timestamp.valueOf(LocalDateTime.now()));
+            sysUserRoleMapper.insert(sysUserRole);
+        }
+
+        return true;
+    }
+
     private String getCurrentLoginUserName() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
@@ -123,4 +155,28 @@ public class SysUserServiceImpl implements SysUserService {
         throw new RuntimeException("找不到当前登录的信息");
     }
 
+    @Override
+    public List<SysUser> list(SysUserQueryDto sysUserQueryDto) {
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        if (!StringUtils.isEmpty(sysUserQueryDto.getUserName())) {
+            queryWrapper.lambda().like(SysUser::getUserName, sysUserQueryDto.getUserName())
+                    .or().like(SysUser::getNickName, sysUserQueryDto.getUserName());
+        }
+        if (!StringUtils.isEmpty(sysUserQueryDto.getCreateTimeStart())
+                && !StringUtils.isEmpty(sysUserQueryDto.getCreateTimeEnd())) {
+            queryWrapper.and(wrapper -> wrapper.lambda().between(SysUser::getCreateTime,
+                    new Timestamp(sysUserQueryDto.getCreateTimeStart()),
+                    new Timestamp(sysUserQueryDto.getCreateTimeEnd())));
+        }
+        return sysUserMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean delete(Set<Long> ids) {
+        if (sysUserMapper.deleteBatchIds(ids) > 0) {
+            return true;
+        }
+        throw new RuntimeException("删除用户信息失败");
+    }
 }

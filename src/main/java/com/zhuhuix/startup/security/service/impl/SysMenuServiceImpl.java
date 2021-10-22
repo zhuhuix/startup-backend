@@ -90,7 +90,6 @@ public class SysMenuServiceImpl implements SysMenuService {
      * 返回菜单下所有的子菜单
      *
      * @param id 菜单id
-     * @return true为存在嵌套错误，false则没有嵌套
      */
     private void childLoop(Long id, List<SysMenu> childMenus) {
         List<SysMenu> sysMenus = sysMenuMapper.selectChilds(id);

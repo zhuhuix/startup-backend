@@ -74,7 +74,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         if (menu.getPid() != null) {
             List<SysMenu> childMenus = new ArrayList<>();
             childLoop(menu.getId(), childMenus);
-            if (childMenus.stream().filter(m -> m.getId().equals(menu.getPid())).count() > 0) {
+            if (childMenus.stream().anyMatch(m -> m.getId().equals(menu.getPid()))) {
                 throw new RuntimeException("上级菜单不能设置为下级子菜单，防止引起嵌套循环错误！！");
             }
         }
@@ -93,7 +93,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     private void childLoop(Long id, List<SysMenu> childMenus) {
         List<SysMenu> sysMenus = sysMenuMapper.selectChilds(id);
-        if (sysMenus == null || sysMenus.size() ==0) {
+        if (sysMenus == null || sysMenus.size() == 0) {
             return;
         }
         for (SysMenu m : sysMenus) {

@@ -33,15 +33,12 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param userId 用户id
      * @return 权限信息
      */
-    @Select("SELECT m.id, m.`path`, m.`name`,  m.`component`,  m.`icon`,  m.`cache`, m.`hidden`,  m.`redirect`, m.p_id  " +
-            "FROM " +
-            "sys_menu m " +
-            "INNER JOIN sys_permission p ON p.menu_id = m.id " +
-            "INNER JOIN sys_user_role ur ON ur.role_id = p.role_id " +
-            "INNER JOIN sys_user u ON u.id = ur.user_id " +
-            "INNER JOIN sys_role r ON r.id = ur.role_id where ur.user_id=#{userId}"+
-            " and m.enabled=1 " +
-            " order by m.sort "
+    @Select(" SELECT * " +
+            " FROM " +
+            " sys_menu " +
+            " WHERE " +
+            " id IN ( SELECT menu_id FROM sys_permission WHERE role_id IN ( SELECT role_id FROM sys_user_role WHERE user_id =#{userId})) " +
+            " and sys_menu.enabled=1 order by sys_menu.sort  "
     )
     List<PermissionDto> selectUserPermission(Long userId);
 }

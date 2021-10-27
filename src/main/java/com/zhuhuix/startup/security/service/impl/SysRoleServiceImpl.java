@@ -1,7 +1,9 @@
 package com.zhuhuix.startup.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zhuhuix.startup.security.domain.SysPermission;
 import com.zhuhuix.startup.security.domain.SysRole;
+import com.zhuhuix.startup.security.mapper.SysPermissionMapper;
 import com.zhuhuix.startup.security.mapper.SysRoleMapper;
 import com.zhuhuix.startup.security.service.SysRoleService;
 import com.zhuhuix.startup.security.service.dto.RoleQueryDto;
@@ -22,6 +24,7 @@ import java.util.Set;
  *
  * @author zhuhuix
  * @date 2021-09-13
+ * @date 2021-10-26 实现getPermission，savePermission接口
  */
 @Slf4j
 @Service
@@ -30,6 +33,7 @@ import java.util.Set;
 public class SysRoleServiceImpl implements SysRoleService {
 
     private final SysRoleMapper sysRoleMapper;
+    private final SysPermissionMapper sysPermissionMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -117,5 +121,31 @@ public class SysRoleServiceImpl implements SysRoleService {
                     new Timestamp(roleQueryDto.getCreateTimeEnd()));
         }
         return sysRoleMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<SysPermission> getPermission(Long roleId) {
+        QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(SysPermission::getRoleId, roleId);
+        return sysPermissionMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean savePermission(Long roleId, Set<Long> menus) {
+        // 先根据roleId删除原有权限
+        QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(SysPermission::getRoleId, roleId);
+        sysPermissionMapper.delete(queryWrapper);
+        // 再插入roleId新权限
+        for (Long menu : menus) {
+            int rowCount = sysPermissionMapper.insert(
+                    new SysPermission(roleId, menu, Timestamp.valueOf(LocalDateTime.now())));
+            if (rowCount <= 0) {
+                throw new RuntimeException("保存权限失败");
+            }
+        }
+
+        return true;
     }
 }

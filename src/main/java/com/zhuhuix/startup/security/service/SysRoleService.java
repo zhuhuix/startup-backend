@@ -1,5 +1,6 @@
 package com.zhuhuix.startup.security.service;
 
+import com.zhuhuix.startup.security.domain.SysPermission;
 import com.zhuhuix.startup.security.domain.SysRole;
 import com.zhuhuix.startup.security.service.dto.RoleQueryDto;
 
@@ -11,6 +12,7 @@ import java.util.Set;
  *
  * @author zhuhuix
  * @date 2021-09-13
+ * @date 2021-10-26 增加getPermission，savePermission
  */
 public interface SysRoleService {
 
@@ -74,5 +76,22 @@ public interface SysRoleService {
      * @return 角色列表
      */
     List<SysRole> list( RoleQueryDto roleQueryDto);
+
+    /**
+     * 获取角色权限
+     *
+     * @param roleId 角色id
+     * @return 角色权限列表
+     */
+    List<SysPermission> getPermission(Long roleId);
+
+    /**
+     * 保存角色权限
+     *
+     * @param roleId 角色id
+     * @param menus 权限表
+     * @return 是否成功
+     */
+    Boolean savePermission(Long roleId,Set<Long> menus);
 
 }

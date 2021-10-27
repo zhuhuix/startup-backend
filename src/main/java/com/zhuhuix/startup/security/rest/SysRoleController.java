@@ -17,6 +17,7 @@ import java.util.Set;
  *
  * @author zhuhuix
  * @date 2021-09-13
+ *  * @date 2021-10-26 增加getPermission，savePermission API接口
  */
 @Slf4j
 @RestController
@@ -65,5 +66,17 @@ public class SysRoleController {
     @DeleteMapping
     public ResponseEntity<Object> deleteRole(@RequestBody Set<Long> ids) {
         return ResponseEntity.ok(sysRoleService.delete(ids));
+    }
+
+    @ApiOperation("获取角色权限信息")
+    @GetMapping("{roleId}/permission")
+    public ResponseEntity<Object> getPermission(@PathVariable Long roleId) {
+        return ResponseEntity.ok(sysRoleService.getPermission(roleId));
+    }
+
+    @ApiOperation("保存角色权限信息")
+    @PostMapping("{roleId}/permission")
+    public ResponseEntity<Object> savePermission(@PathVariable Long roleId,@RequestBody Set<Long> menus) {
+        return ResponseEntity.ok(sysRoleService.savePermission(roleId,menus));
     }
 }

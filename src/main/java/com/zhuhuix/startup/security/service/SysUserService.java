@@ -3,6 +3,7 @@ package com.zhuhuix.startup.security.service;
 import com.zhuhuix.startup.security.domain.SysRole;
 import com.zhuhuix.startup.security.domain.SysUser;
 import com.zhuhuix.startup.security.service.dto.PermissionDto;
+import com.zhuhuix.startup.security.service.dto.SysUserDto;
 import com.zhuhuix.startup.security.service.dto.SysUserQueryDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,9 @@ import java.util.Set;
  *
  * @author zhuhuix
  * @date 2020-04-03
+ *
+ * @date 2022-04-07
+ * 增加分页查询接口
  */
 public interface SysUserService {
 
@@ -108,12 +112,19 @@ public interface SysUserService {
     List<PermissionDto> getUserPermission(Long userId);
 
     /**
-     * 根据条件查询用户信息
+     * 根据条件查询用户信息，并返回全部用户列表
      *
      * @param sysUserQueryDto 查询条件
      * @return 用户列表
      */
     List<SysUser> list(SysUserQueryDto sysUserQueryDto);
+
+    /**
+     * 根据条件查询用户信息,并返回分页用户列表
+     * @param sysUserQueryDto 查询条件
+     * @return 分页用户数据
+     */
+    SysUserDto page(SysUserQueryDto sysUserQueryDto);
 
     /**
      * 批量删除用户

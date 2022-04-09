@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
  *
  * @author zhuhuix
  * @date 2021-09-28
+ *
+ * @date 2022-04-04
+ * 增加分页传入参数
  */
 @ApiModel(value = "用户查询条件")
 @Data
@@ -26,4 +29,10 @@ public class SysUserQueryDto {
 
     @ApiModelProperty(value = "注册结束时间")
     private Long createTimeEnd;
+
+    @ApiModelProperty(value = "当前页数")
+    private Integer currentPage;
+
+    @ApiModelProperty(value = "每页条数")
+    private Integer pageSize;
 }

@@ -1,6 +1,7 @@
 package com.zhuhuix.startup.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zhuhuix.startup.security.domain.SysRole;
 import com.zhuhuix.startup.security.domain.SysUser;
 import com.zhuhuix.startup.security.domain.SysUserRole;
@@ -8,6 +9,7 @@ import com.zhuhuix.startup.security.mapper.SysUserMapper;
 import com.zhuhuix.startup.security.mapper.SysUserRoleMapper;
 import com.zhuhuix.startup.security.service.SysUserService;
 import com.zhuhuix.startup.security.service.dto.PermissionDto;
+import com.zhuhuix.startup.security.service.dto.SysUserDto;
 import com.zhuhuix.startup.security.service.dto.SysUserQueryDto;
 import com.zhuhuix.startup.tools.domain.UploadFile;
 import com.zhuhuix.startup.tools.service.UploadFileTool;
@@ -37,6 +39,9 @@ import java.util.Set;
  *
  * @author zhuhuix
  * @date 2020-04-03
+ *
+ * @date 2022-04-07
+ * 实现分页查询
  */
 @Slf4j
 @Service
@@ -169,6 +174,33 @@ public class SysUserServiceImpl implements SysUserService {
                     new Timestamp(sysUserQueryDto.getCreateTimeEnd())));
         }
         return sysUserMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public SysUserDto page(SysUserQueryDto sysUserQueryDto) {
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        if (!StringUtils.isEmpty(sysUserQueryDto.getUserName())) {
+            queryWrapper.lambda().like(SysUser::getUserName, sysUserQueryDto.getUserName())
+                    .or().like(SysUser::getNickName, sysUserQueryDto.getUserName());
+        }
+        if (!StringUtils.isEmpty(sysUserQueryDto.getCreateTimeStart())
+                && !StringUtils.isEmpty(sysUserQueryDto.getCreateTimeEnd())) {
+            queryWrapper.and(wrapper -> wrapper.lambda().between(SysUser::getCreateTime,
+                    new Timestamp(sysUserQueryDto.getCreateTimeStart()),
+                    new Timestamp(sysUserQueryDto.getCreateTimeEnd())));
+        }
+
+        Page<SysUser> page = new Page<>(sysUserQueryDto.getCurrentPage(), sysUserQueryDto.getPageSize());
+        sysUserMapper.selectPage(page, queryWrapper);
+
+        SysUserDto sysUserDto = new SysUserDto();
+        sysUserDto.setCurrentPage(sysUserQueryDto.getCurrentPage());
+        sysUserDto.setPageSize(sysUserQueryDto.getPageSize());
+        sysUserDto.setTotalPage(page.getTotal());
+        sysUserDto.setSysUserList(page.getRecords());
+
+        return sysUserDto;
+
     }
 
     @Override

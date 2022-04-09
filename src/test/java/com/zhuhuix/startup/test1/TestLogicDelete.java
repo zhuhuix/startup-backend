@@ -8,10 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Slf4j
-public class TestLogicDelete {
+class TestLogicDelete {
 
     @Test
-    public void test() {
+    void test() {
         SysUserMapper sysUserMapper = SpringContextHolder.getBean(SysUserMapper.class);
         sysUserMapper.deleteById(15L);
     }

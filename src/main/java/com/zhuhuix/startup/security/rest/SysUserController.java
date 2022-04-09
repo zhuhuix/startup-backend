@@ -19,6 +19,9 @@ import java.util.Set;
  *
  * @author zhuhuix
  * @date 2021-08-16
+ *
+ * @date 2022-04-07
+ * 增加分页查询接口
  */
 @Slf4j
 @RestController
@@ -54,10 +57,16 @@ public class SysUserController {
         return ResponseEntity.ok(sysUserService.updateAvatar(avatar));
     }
 
-    @ApiOperation("根据条件查询用户列表")
+    @ApiOperation("根据条件查询返回用户列表")
     @PostMapping("/list")
     public ResponseEntity<Object> getSysUserList(@RequestBody SysUserQueryDto sysUserQueryDto) {
         return ResponseEntity.ok(sysUserService.list(sysUserQueryDto));
+    }
+
+    @ApiOperation("根据条件查询返回用户分页列表")
+    @PostMapping("/page")
+    public ResponseEntity<Object> getSysUserPage(@RequestBody SysUserQueryDto sysUserQueryDto) {
+        return ResponseEntity.ok(sysUserService.page(sysUserQueryDto));
     }
 
     @ApiOperation("批量删除用户")
